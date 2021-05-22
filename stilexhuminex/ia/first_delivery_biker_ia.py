@@ -40,15 +40,20 @@ class FirstDeliveryAI:
         (bx, by) = self.bikerManager.get_pos(biker)
         delivery = self.bikerManager.get_deliveries(biker)[0]
 
+        if index == 'client':
+            i = (delivery.split(';')[2], delivery.split(';')[3])
+        else:
+            i = (delivery.split(';')[4], delivery.split(';')[5])
+
         array = []
-        if runner.get_map_pos(delivery[index], shift_x=1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0] + 1, delivery[index][1])))
-        if runner.get_map_pos(delivery[index], shift_x=-1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0] - 1, delivery[index][1])))
-        if runner.get_map_pos(delivery[index], shift_y=1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0], delivery[index][1] + 1)))
-        if runner.get_map_pos(delivery[index], shift_y=-1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0], delivery[index][1] - 1)))
+        if runner.get_map_pos(i, shift_x=1) == 'R':
+            array.append(self.mapManager.astar_search((bx, by), (i[0] + 1, i[1])))
+        if runner.get_map_pos(i, shift_x=-1) == 'R':
+            array.append(self.mapManager.astar_search((bx, by), (i[0] - 1, i[1])))
+        if runner.get_map_pos(i, shift_y=1) == 'R':
+            array.append(self.mapManager.astar_search((bx, by), (i[0], i[1] + 1)))
+        if runner.get_map_pos(i, shift_y=-1) == 'R':
+            array.append(self.mapManager.astar_search((bx, by), (i[0], i[1] - 1)))
 
         self.bikerManager.set_path(biker, self.array_min(array))
         self.bikerManager.set_status(biker, new_status)

@@ -4,4 +4,4 @@ from stilexhuminex.ia.value_ai import ValueAI
 
 
 if __name__ == '__main__':
-    ValueAI()()
+    FirstDeliveryAI()()
