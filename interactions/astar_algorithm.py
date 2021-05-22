@@ -1,6 +1,3 @@
-from numpy.core.records import array
-
-
 class Node:
     # Initialize the class
     def __init__(self, position: (), parent: ()):
@@ -24,7 +21,6 @@ class Node:
 
 
 class MapManager:
-
     open_nodes = None
     closed_nodes = None
     plateau = None
@@ -64,13 +60,13 @@ class MapManager:
             (x, y) = current_node.position
             # Get neighbors
             neighbors = []
-            if x - 1 >= 0 :
+            if x - 1 >= 0:
                 neighbors.append((x - 1, y))
-            if x + 1 <= 30 :
+            if x + 1 <= 30:
                 neighbors.append((x + 1, y))
-            if y - 1 >= 0 :
+            if y - 1 >= 0:
                 neighbors.append((x, y - 1))
-            if y + 1 <= 30 :
+            if y + 1 <= 30:
                 neighbors.append((x, y + 1))
 
             # Loop neighbors
@@ -78,7 +74,7 @@ class MapManager:
                 # Get value from plat
                 map_value = self.plateau[next_node[0]][next_node[1]]
                 # Check if the node is a wall
-                if map_value != "R" :
+                if map_value != "R":
                     continue
                 # Create a neighbor node
                 neighbor = Node(next_node, current_node)
@@ -88,9 +84,8 @@ class MapManager:
                 # Generate heuristics (Manhattan distance)
                 neighbor.g = abs(neighbor.position[0] - start_node.position[0]) + abs(
                     neighbor.position[1] - start_node.position[1])
-                neighbor.h = abs(neighbor.position[0] - goal_node.position[0]) + abs(
-                    neighbor.position[1] - goal_node.position[1])
-                neighbor.f = neighbor.g + neighbor.h
+                # neighbor.h = abs(neighbor.position[0] - goal_node.position[0]) + abs(neighbor.position[1] - goal_node.position[1])
+                neighbor.f = neighbor.g  # +neighbor.h
                 # Check if neighbor is in open list and if it has a lower f value
                 if self.add_to_open(neighbor):
                     # Everything is green, add neighbor to open list
