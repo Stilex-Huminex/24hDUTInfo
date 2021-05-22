@@ -90,7 +90,7 @@ class ValueAI:
                 array_com[0] = max_
 
             while runner.can_play:
-                print(runner.turn)
+                # print(runner.turn)
                 # print(self.bikerManager.get_status(0))
 
                 if runner.turn > turn:
@@ -102,7 +102,6 @@ class ValueAI:
 
                     if runner.nbJoueurs == 1:
                         array_com = ValueAI.meilleures_commandes(array_com)
-                        print("Je suis tout seul")
                     else:
                         array_com.sort()
                         array_com = array_com[0:3]

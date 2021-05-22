@@ -81,7 +81,7 @@ class GameInteraction:
             if self.pa == 0:
                 self.end_turn()
                 if not self.can_play:
-                    return
+                    return ['OUT', []]
 
         # Interact with the game
         self.debug_send(self.command(command))
@@ -98,7 +98,6 @@ class GameInteraction:
             
         if command == "TEAMS":
             self.nbJoueurs = int(infos[1][0])
-
 
         return infos
 
@@ -129,9 +128,9 @@ class GameInteraction:
 
     def debug_recv(self, size):
         e = self.connection.recv(size)
-        #print("<< ", e)
+        # print("<< ", e)
         return e
 
     def debug_send(self, command):
         self.connection.send(command)
-        #print(">> ", command)
+        # print(">> ", command)
