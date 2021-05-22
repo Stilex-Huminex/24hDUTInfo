@@ -55,7 +55,7 @@ class GameInteraction:
         infos = self.prettify_command(self.connection.recv(1024))
         
         if (command == "GETMAP"):
-            self.map = self.plateauToMatrice(infos[0])
+            self.map = self.plateauToMatrice(infos[1][0])
 
         return infos
 
