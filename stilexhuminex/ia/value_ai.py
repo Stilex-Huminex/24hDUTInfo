@@ -4,7 +4,7 @@ from stilexhuminex.utils.biker_interaction import BikerInteraction, BikerStatus
 from stilexhuminex.utils.order_manager import Order
 
 
-class valueAI:
+class ValueAI:
 
     mapManager = None
     bikerManager = None
