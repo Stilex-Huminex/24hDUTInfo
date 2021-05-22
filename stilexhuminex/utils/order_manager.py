@@ -4,7 +4,6 @@ from stilexhuminex.utils.biker_interaction import BikerInteraction
 
 
 class Order:
-
     order_id = None
     valeur = None
     resto_loc = None
@@ -56,7 +55,6 @@ class Order:
         if (plateau[mx][my+1] == 'R'):
             array_maison.append((mx, my+1))
         self.maison_loc = self.array_min(array_maison)
-
 
     def __lt__(self, other):
         mapMan = MapManager(self.runner.map)
