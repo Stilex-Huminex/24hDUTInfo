@@ -70,7 +70,7 @@ class ValueAI:
             self.mapManager = MapManager(runner.map)
             self.bikerManager = BikerInteraction()
             runner("TEAMS")
-            runner("ENDTURN")
+            runner.end_turn()
 
             # Get bikers
             retour = runner("GETBIKERS|" + runner.team_id)
@@ -83,13 +83,11 @@ class ValueAI:
 
             if runner.nbJoueurs == 1:
                 array_com = ValueAI.meilleures_commandes(array_com)
-                print("Je suis tout seul")
             else:
                 array_com.sort()
                 array_com = array_com[0:3]
                 max_ = ValueAI.max_val(array_com)
                 array_com[0] = max_
-                print("Je ne suis pas tout seul")
 
             while runner.can_play:
                 print(runner.turn)
@@ -110,7 +108,6 @@ class ValueAI:
                         array_com = array_com[0:3]
                         max_ = ValueAI.max_val(array_com)
                         array_com[0] = max_
-                        print("Je ne suis pas tout seul")
 
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
                         self.bikerManager.deliver(0, self.bikerManager.get_deliveries(0)[0])
