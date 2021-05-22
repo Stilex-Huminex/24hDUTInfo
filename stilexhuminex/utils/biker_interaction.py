@@ -73,3 +73,18 @@ class BikerInteraction:
         dest = tuple(dest)
         return dest == (pos[0] - 1, pos[1]) or dest == (pos[0] + 1, pos[1]) \
             or dest == (pos[0], pos[1] - 1) or dest == (pos[0], pos[1] + 1)
+#Petit easteregg pour les coquins ;)
+#                               _.._
+#                             .'    '.
+#                            (____/`\ \
+#                           (  |' ' )  )
+#                           )  _\= _/  (
+#                 __..---.(`_.'  ` \    )
+#                `;-""-._(_( .      `; (
+#                /       `-`'--'     ; )
+#               /    /  .    ( .  ,| |(
+#_.-`'---...__,'    /-,..___.-'--'_| |_)
+#'-'``'-.._       ,'  |   / .........'
+#          ``;--"`;   |   `-`
+#             `'..__.'
+#
