@@ -6,7 +6,8 @@ port = 12800
 connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connexion_avec_serveur.connect((hote, port))
 print("Connexion établie avec le serveur sur le port {}".format(port))
- 
+##test test Logan
+
 msg_a_envoyer = b""
 while msg_a_envoyer != b"fin":
     ##msg_a_envoyer = input("> ")
