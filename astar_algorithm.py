@@ -73,7 +73,7 @@ class MapManager:
             # Loop neighbors
             for next_node in neighbors:
                 # Get value from plat
-                map_value = self.plat_str.get(next_node)
+                map_value = self.plateau.get(next_node)
                 # Check if the node is a wall
                 if map_value == '#':
                     continue

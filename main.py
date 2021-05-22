@@ -1,25 +1,51 @@
 import socket
+
+
+class GameInteraction:
+
+    host = None
+    port = None
+    connection = None
+
+    @staticmethod
+    def command(name: str):
+        return f"{name}\r\n".encode()
+
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+    def __call__(self):
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.connect((self.host, self.port))
+
+        print(f"Connexion établie avec le serveur sur le port {self.port}")
+
+        self.register()
+        self.prompt()
+
+        print("Fermeture de la connexion")
+        self.connection.close()
+
+    def register(self):
+        message = ""
+        while message != self.command("NAME"):
+            message = self.connection.recv(1024)
+
+        self.connection.send(self.command("StilexHuminex"))
+
+    def prompt(self):
+        to_send = ""
+
+        while to_send != b"fin":
+            to_send = input(">> ")
+            to_send += '\r\n'
+            to_send = to_send.encode()
+            self.connection.send(to_send)
+
+            msg_recu = self.connection.recv(1024)
+            print("<< " + msg_recu.decode())
  
-hote = "localhost"
-port = 2121
- 
-connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connexion_avec_serveur.connect((hote, port))
-print("Connexion établie avec le serveur sur le port {}".format(port))
 
-
-msg_a_envoyer = b""
-
-msg_recu = connexion_avec_serveur.recv(1024)
-print("<< " + msg_recu.decode())
-
-while msg_a_envoyer != b"fin":
-    msg_a_envoyer = input(">> ")
-    msg_a_envoyer = msg_a_envoyer.encode()
-    connexion_avec_serveur.send(msg_a_envoyer)
-    
-    msg_recu = connexion_avec_serveur.recv(1024)
-    print("<< " + msg_recu.decode()) 
- 
-print("Fermeture de la connexion")
-connexion_avec_serveur.close()
+runner = GameInteraction("localhost", 2121)
+runner()
