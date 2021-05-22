@@ -86,11 +86,9 @@ class MapManager:
                 if neighbor in self.closed_nodes:
                     continue
                 # Generate heuristics (Manhattan distance)
-                neighbor.g = abs(neighbor.position[0] - start_node.position[0]) + abs(
-                    neighbor.position[1] - start_node.position[1])
-                neighbor.h = abs(neighbor.position[0] - goal_node.position[0]) + abs(
-                    neighbor.position[1] - goal_node.position[1])
-                neighbor.f = neighbor.g + neighbor.h
+                neighbor.g = abs(neighbor.position[0] - start_node.position[0]) + abs(neighbor.position[1] - start_node.position[1])
+                #neighbor.h = abs(neighbor.position[0] - goal_node.position[0]) + abs(neighbor.position[1] - goal_node.position[1])
+                neighbor.f = neighbor.g #+neighbor.h
                 # Check if neighbor is in open list and if it has a lower f value
                 if self.add_to_open(neighbor):
                     # Everything is green, add neighbor to open list
