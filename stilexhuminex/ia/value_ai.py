@@ -85,7 +85,8 @@ class ValueAI:
                 array_com = ValueAI.meilleures_commandes(array_com)
             else:
                 array_com.sort()
-                array_com = array_com[0:3]
+                if (len(array_com) > 3):
+                    array_com = array_com[0:3]
                 max_ = ValueAI.max_val(array_com)
                 array_com[0] = max_
 
@@ -104,7 +105,8 @@ class ValueAI:
                         array_com = ValueAI.meilleures_commandes(array_com)
                     else:
                         array_com.sort()
-                        array_com = array_com[0:3]
+                        if (len(array_com) > 3):
+                            array_com = array_com[0:3]
                         max_ = ValueAI.max_val(array_com)
                         array_com[0] = max_
 
@@ -138,7 +140,7 @@ class ValueAI:
                         if ret[0] == "OK":
                             self.bikerManager.set_status(0, BikerStatus.GOING_TO_CLIENT)
                 else:
-                    self.move(runner, 0)
+                    self.move(runner, 0)    
 
     def __call__(self):
         self.run()
