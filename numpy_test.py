@@ -11,11 +11,11 @@ tab = plateau.split(',')
 print(tab)
 
 arr = ['']
+arr.remove('')
 
 for string in tab:
     print(string)
-    string = ','.join(string[i:i+1] for i in range(0, len(plateau)))
-    arr.append(string.split(','))
+    arr.append(numpy.fromstring())
     
 print(arr)
     
