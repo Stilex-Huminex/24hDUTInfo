@@ -99,9 +99,45 @@ class MapManager:
         # Return None, no path is found
         return None
 
+
+
     # Check if a neighbor should be added to open list
-    def add_to_open(self, neighbor):
-        for node in self.open_nodes:
+    #def add_to_open(self, neighbor):
+    #    for node in self.open_nodes:
+    #       if neighbor == node and neighbor.f >= node.f:
+    #            return False
+    #    return True
+
+
+
+                   #           #
+             ##             ##
+       ######                  ######
+     ##                              ##
+    def add_to_open(self, neighbor):   #
+    #                                   #
+        for node in self.open_nodes:     #
+   #      #                     #         #
+  #      # #                     #        # 
+  #     #   #                     #        #
+ #     #     #                     #        #
+ #    #    ####                     #       #            
+#     #####    ##                   #        #
+#  #####         #                   #        #
+####              #                   #        #
+                  #                    #        #
+                  #                     #        #
+                 #                     # #       #
+                #                     #   #     #
+              #                      #    #     #
             if neighbor == node and neighbor.f >= node.f:
-                return False
-        return True
+          #                         #   #     #
+                 return False      ##  ##     #
+       #       #                  # ### #   #
+      #        #                 # #   ####
+      #         #                #  ###
+       #         #              #
+        return True            #
+         #        #            #
+          #        #          #
+           #                 #
