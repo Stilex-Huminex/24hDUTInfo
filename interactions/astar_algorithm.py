@@ -55,6 +55,8 @@ class MapManager:
                     path.append(current_node.position)
                     current_node = current_node.parent
                 # Return reversed path
+                self.open_nodes = []
+                self.closed_nodes = []
                 return path[::-1]
             # Unzip the current node position
             (x, y) = current_node.position
