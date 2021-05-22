@@ -57,11 +57,11 @@ class OrderManagerTest:
             self.bikerManager.parse_bikers_pos(retour[1])
 
             commande = runner("GETDELIVERIES")
-            arrayCom = []
+            array_com = []
             for comm in commande[1]:
-                arrayCom.append(Order(comm, runner, self.bikerManager))
+                array_com.append(Order(comm, runner, self.bikerManager))
             
-            arrayCom.sort()
+            array_com.sort()
 
             while runner.can_play:
                 # print(self.bikerManager.get_status(0))
@@ -69,18 +69,17 @@ class OrderManagerTest:
                 if runner.turn > turn:
                     turn = runner.turn
                     commande = runner("GETDELIVERIES")
-                    arrayCom = []
+                    array_com = []
                     for comm in commande[1]:
-                        arrayCom.append(Order(comm, runner, self.bikerManager))
-                    arrayCom.sort() 
+                        array_com.append(Order(comm, runner, self.bikerManager))
+                    array_com.sort()
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
                         self.bikerManager.deliver(0, self.bikerManager.get_deliveries(0)[0])
-                        self.bikerManager.take_delivery(0, arrayCom[0])
+                        self.bikerManager.take_delivery(0, array_com[0])
                         self.gen_new_path(0, BikerStatus.GOING_TO_RESTAURANT)
-                
 
                 if self.bikerManager.get_status(0) == BikerStatus.IDLE:
-                    self.bikerManager.take_delivery(0, arrayCom[0])
+                    self.bikerManager.take_delivery(0, array_com[0])
 
                 # Get the prepared next move
                 self.next_move = self.bikerManager.get_next_move(0)
@@ -95,7 +94,7 @@ class OrderManagerTest:
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT:
                         ret = runner('DELIVER|0|' + d.order_id)
                         if ret[0] == "OK":
-                            arrayCom.sort() 
+                            array_com.sort()
                             self.bikerManager.set_status(0, BikerStatus.IDLE)   
                             self.bikerManager.deliver(0, d)
                     elif self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:

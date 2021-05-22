@@ -30,6 +30,10 @@ class MapManager:
         self.closed_nodes = []
         self.plateau = plat
 
+    @staticmethod
+    def astar_distance(start, end):
+        return abs(start[0] - end[0]) + abs(start[1] - end[1])
+
     def astar_search(self, start, end):
 
         # Create a start node and an goal node

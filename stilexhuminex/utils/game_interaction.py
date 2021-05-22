@@ -104,6 +104,7 @@ class GameInteraction:
         self.wait_for_server_command("OK")
         ret = self.wait_for_server_command(["START", "ENDGAME"])
         if ret[0] == "ENDGAME":
+            print(f"FIN DU JEU: {ret[1][0]} points")
             self.can_play = False
 
     def wait_for_server_command(self, command):

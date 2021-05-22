@@ -32,37 +32,31 @@ class Order:
         ry = int(arguments[3])
         mx = int(arguments[4])
         my = int(arguments[5])
-    
 
         array_resto = []
-        if (plateau[rx-1][ry] == 'R'):
-            array_resto.append((rx-1, ry))
-        if (plateau[rx+1][ry] == 'R'):
-            array_resto.append((rx+1, ry))
-        if (plateau[rx][ry-1] == 'R'):
-            array_resto.append((rx, ry-1))
-        if (plateau[rx][ry+1] == 'R'):
-            array_resto.append((rx, ry+1))
+        if plateau[rx - 1][ry] == 'R':
+            array_resto.append((rx - 1, ry))
+        if plateau[rx + 1][ry] == 'R':
+            array_resto.append((rx + 1, ry))
+        if plateau[rx][ry - 1] == 'R':
+            array_resto.append((rx, ry - 1))
+        if plateau[rx][ry + 1] == 'R':
+            array_resto.append((rx, ry + 1))
         self.resto_loc = self.array_min(array_resto)
 
         array_maison = []
-        if (plateau[mx-1][my] == 'R'):
-            array_maison.append((mx-1, my))
-        if (plateau[mx+1][my] == 'R'):
-            array_maison.append((mx+1, my))
-        if (plateau[mx][my-1] == 'R'):
-            array_maison.append((mx, my-1))
-        if (plateau[mx][my+1] == 'R'):
-            array_maison.append((mx, my+1))
+        if plateau[mx - 1][my] == 'R':
+            array_maison.append((mx - 1, my))
+        if plateau[mx + 1][my] == 'R':
+            array_maison.append((mx + 1, my))
+        if plateau[mx][my - 1] == 'R':
+            array_maison.append((mx, my - 1))
+        if plateau[mx][my + 1] == 'R':
+            array_maison.append((mx, my + 1))
         self.maison_loc = self.array_min(array_maison)
 
     def __lt__(self, other):
-        mapMan = MapManager(self.runner.map)
-        selfPath0 = mapMan.astar_search(self.biker.get_pos(0) , self.resto_loc)
-        #selfPath1 = mapMan.astar_search(self.biker.get_pos(1) , self.resto_loc)
-        otherPath0 = mapMan.astar_search(self.biker.get_pos(0) , other.resto_loc)
-        #otherPath1 = mapMan.astar_search(self.biker.get_pos(1) , other.resto_loc)
-
-        #selfPath = self.array_min([selfPath0, selfPath1])
-        #otherPath = self.array_min([otherPath0, otherPath1])
-        return len(selfPath0) < len(otherPath0)
+        map_man = MapManager(self.runner.map)
+        self_path = map_man.astar_search(self.biker.get_pos(0), self.resto_loc)
+        other_path = map_man.astar_search(self.biker.get_pos(0), other.resto_loc)
+        return len(self_path) < len(other_path)
