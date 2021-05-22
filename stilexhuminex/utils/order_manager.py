@@ -58,5 +58,5 @@ class Order:
     def __lt__(self, other):
         map_man = MapManager(self.runner.map)
         self_path = map_man.astar_search(self.biker.get_pos(0), self.resto_loc)
-        other_path = map_man.astar_search(self.biker.get_pos(0), other.resto_loc)
+        other_path = map_man.astar_search(other.biker.get_pos(0), other.resto_loc)
         return len(self_path) < len(other_path)
