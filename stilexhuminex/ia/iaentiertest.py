@@ -1,5 +1,5 @@
-from interactions.game_interaction import GameInteraction
-from interactions.astar_algorithm import MapManager
+from stilexhuminex.utils.game_interaction import GameInteraction
+from stilexhuminex.utils.astar_algorithm import MapManager
 from random import *
 
 def min(array):
