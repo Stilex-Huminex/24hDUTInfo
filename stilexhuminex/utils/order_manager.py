@@ -23,7 +23,7 @@ class Order:
     def __init__(self, args, runner: GameInteraction, biker: BikerInteraction):
         arguments = args.split(';')
         self.order_id = arguments[0]
-        self.valeur = arguments[1]
+        self.valeur = float(arguments[1])
         self.runner = runner
         self.biker = biker
         plateau = runner.map
