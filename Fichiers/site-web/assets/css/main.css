@@ -2,6 +2,10 @@
   font-family: "Montserrat";
   src: url("../fonts/Montserrat-Bold.ttf");
 }
+@font-face {
+  font-family: "Precious";
+  src: url("../fonts/precious.regular.ttf");
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -51,6 +55,10 @@ main {
   font-family: "Montserrat";
   src: url("../fonts/Montserrat-Bold.ttf");
 }
+@font-face {
+  font-family: "Precious";
+  src: url("../fonts/precious.regular.ttf");
+}
 .text-primary {
   color: #146262 !important;
 }
@@ -87,6 +95,10 @@ article.showcase .carousel.negate-bottom-gap .carousel-container::before {
 
 section {
   margin-bottom: 4vh;
+}
+
+.text-fancy {
+  font-family: "Precious", serif, sans-serif;
 }
 
 /*# sourceMappingURL=main.css.map */
