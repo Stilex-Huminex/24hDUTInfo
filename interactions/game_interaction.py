@@ -7,6 +7,7 @@ class GameInteraction:
     port = None
     connection = None
     team_id = None
+    map = None
 
     @staticmethod
     def command(name: str):
@@ -28,7 +29,7 @@ class GameInteraction:
         return [self.parsename(command), self.parseparams(command)]
 
     @staticmethod
-    def plateauToMAtrice(plateau: str):
+    def plateauToMatrice(plateau: str):
         plateau = ','.join(plateau[i:i+31] for i in range(0, len(plateau), 31))
         tab = plateau.split(',')
         arr = []
@@ -47,9 +48,15 @@ class GameInteraction:
         self.port = port
 
     def __call__(self, command: str):
+        
         # Interact with the game
         self.connection.send(self.command(command))
-        return self.prettify_command(self.connection.recv(1024))
+        infos = self.prettify_command(self.connection.recv(1024))
+        
+        if (command == "GETMAP"):
+            self.map = self.plateauToMatrice(infos[0])
+
+        return infos
 
     def __enter__(self):
         # Connect to the game socket
