@@ -88,4 +88,8 @@ with GameInteraction("localhost", 2121) as runner:
     retour = "yes"
     while retour != "NOK":
         state = runner("DELIVER|0|" + code)
+        print(state)
         retour = state[0]
+
+    while True:
+        runner('ENDTURN')
