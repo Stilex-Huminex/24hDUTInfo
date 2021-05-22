@@ -40,9 +40,9 @@ with GameInteraction("localhost", 2121) as runner:
     while len(route) != 0:
         where = route.pop(0)
         if (where[0] - old[0] == -1):
-        
+            runner('MOVE|0|T')
         if (where[0] - old[0] == 1):
-        
+            runner('MOVE|0|B')
         if (where[1] - old[1] == -1):
         
         if (where[1] - old[1] == 1):

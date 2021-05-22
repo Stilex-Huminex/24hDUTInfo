@@ -57,6 +57,8 @@ class GameInteraction:
         
         if (command == "GETMAP"):
             self.map = self.plateauToMatrice(infos[1][0])
+        if (command == "ENDTURN"):
+            self.pa = 8
 
         if (command.startswith("TAKE") or command.startswith("MOVE") or command.startswith("DELIVER")):
             self.pa -= 1
