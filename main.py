@@ -66,4 +66,5 @@ class GameInteraction:
  
 
 with GameInteraction("localhost", 2121) as runner:
-    print(runner('GETMAP'))
+    while True:
+        print(runner('ENDTURN'))
