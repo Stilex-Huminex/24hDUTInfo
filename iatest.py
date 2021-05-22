@@ -104,13 +104,13 @@ with GameInteraction("localhost", 2121) as runner:
    
     array = []
     if (runner.map[int(tab2[2])-1][int(tab2[3])] == 'R'):
-        array.append(mapMan.astar_search((bx,by), (int(tab2[2])-1, int(tab2[3]))))
+        array.append(mapMan.astar_search((b2x,b2y), (int(tab2[2])-1, int(tab2[3]))))
     if (runner.map[int(tab2[2])+1][int(tab2[3])] == 'R'):
-        array.append(mapMan.astar_search((bx,by), (int(tab2[2])+1, int(tab2[3]))))
+        array.append(mapMan.astar_search((b2x,b2y), (int(tab2[2])+1, int(tab2[3]))))
     if (runner.map[int(tab2[2])][int(tab2[3])-1] == 'R'):
-        array.append(mapMan.astar_search((bx,by), (int(tab2[2]), int(tab2[3])-1)))
+        array.append(mapMan.astar_search((b2x,b2y), (int(tab2[2]), int(tab2[3])-1)))
     if (runner.map[int(tab2[2])][int(tab2[3])+1] == 'R'):
-        array.append(mapMan.astar_search((bx,by), (int(tab2[2]), int(tab2[3])+1)))
+        array.append(mapMan.astar_search((b2x,b2y), (int(tab2[2]), int(tab2[3])+1)))
 
     route = min(array)
     print(route)
