@@ -9,6 +9,7 @@ print("Connexion établie avec le serveur sur le port {}".format(port))
 ##test test Logan
 
 msg_a_envoyer = b""
+msg_recu = connexion_avec_serveur.recv(1024)
 while msg_a_envoyer != b"fin":
     msg_a_envoyer = input(">> ")
     # Peut planter si vous tapez des caractères spéciaux
