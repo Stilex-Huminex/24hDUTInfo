@@ -5,7 +5,6 @@ from stilexhuminex.utils.order_manager import Order
 
 
 class ValueAI:
-
     mapManager = None
     bikerManager = None
     next_move = None
@@ -31,23 +30,22 @@ class ValueAI:
             return 'R'
         return "N"
 
-        
     @staticmethod
     def max_val(array):
-        max = array[0]
+        max_ = array[0]
         for c in array:
-            if c.valeur > max.valeur:
-                max = c
+            if c.valeur > max_.valeur:
+                max_ = c
 
-        return max
+        return max_
 
     @staticmethod
     def meilleures_commandes(array):
         retour = []
-        for i in range(len(array)-4):
-            max = soloAI.max_val(array)
-            retour.append(max)
-            array.remove(max)
+        for i in range(len(array) - 4):
+            max_ = ValueAI.max_val(array)
+            retour.append(max_)
+            array.remove(max_)
         retour.sort()
         return retour
 
@@ -79,20 +77,19 @@ class ValueAI:
             self.bikerManager.parse_bikers_pos(retour[1])
 
             commande = runner("GETDELIVERIES")
-            arrayCom = []
+            array_com = []
             for comm in commande[1]:
-                arrayCom.append(Order(comm, runner, self.bikerManager))
-            
-            if (runner.nbJoueurs == 1):
-                arrayCom = soloAI.meilleures_commandes(arrayCom)
+                array_com.append(Order(comm, runner, self.bikerManager))
+
+            if runner.nbJoueurs == 1:
+                array_com = ValueAI.meilleures_commandes(array_com)
                 print("Je suis tout seul")
             else:
-                arrayCom.sort()
-                arrayCom = arrayCom[0:3]
-                max = soloAI.max_val(arrayCom)
-                arrayCom[0] = max
+                array_com.sort()
+                array_com = array_com[0:3]
+                max_ = ValueAI.max_val(array_com)
+                array_com[0] = max_
                 print("Je ne suis pas tout seul")
-
 
             while runner.can_play:
                 print(runner.turn)
@@ -101,34 +98,34 @@ class ValueAI:
                 if runner.turn > turn:
                     turn = runner.turn
                     commande = runner("GETDELIVERIES")
-                    arrayCom = []
+                    array_com = []
                     for comm in commande[1]:
-                        arrayCom.append(Order(comm, runner, self.bikerManager))
+                        array_com.append(Order(comm, runner, self.bikerManager))
 
-                    if (runner.nbJoueurs == 1):
-                        arrayCom = soloAI.meilleures_commandes(arrayCom)
+                    if runner.nbJoueurs == 1:
+                        array_com = ValueAI.meilleures_commandes(array_com)
                         print("Je suis tout seul")
                     else:
-                        arrayCom.sort()
-                        arrayCom = arrayCom[0:3]
-                        max = soloAI.max_val(arrayCom)
-                        arrayCom[0] = max
+                        array_com.sort()
+                        array_com = array_com[0:3]
+                        max_ = ValueAI.max_val(array_com)
+                        array_com[0] = max_
                         print("Je ne suis pas tout seul")
 
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
                         self.bikerManager.deliver(0, self.bikerManager.get_deliveries(0)[0])
-                        self.bikerManager.take_delivery(0, arrayCom[0])
+                        self.bikerManager.take_delivery(0, array_com[0])
                         self.gen_new_path(0, BikerStatus.GOING_TO_RESTAURANT)
-                
 
                 if self.bikerManager.get_status(0) == BikerStatus.IDLE:
-                    self.bikerManager.take_delivery(0, arrayCom[0])
+                    self.bikerManager.take_delivery(0, array_com[0])
 
                 # Get the prepared next move
                 self.next_move = self.bikerManager.get_next_move(0)
                 if self.next_move is None:
                     # If there is none, calculate it
-                    self.gen_new_path(0, BikerStatus.GOING_TO_CLIENT if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT else BikerStatus.GOING_TO_RESTAURANT)
+                    self.gen_new_path(0, BikerStatus.GOING_TO_CLIENT if self.bikerManager.get_status(
+                        0) == BikerStatus.GOING_TO_CLIENT else BikerStatus.GOING_TO_RESTAURANT)
                     self.next_move = self.bikerManager.get_next_move(0)
 
                 # Act on it
@@ -137,8 +134,8 @@ class ValueAI:
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT:
                         ret = runner('DELIVER|0|' + d.order_id)
                         if ret[0] == "OK":
-                            arrayCom.sort()
-                            self.bikerManager.set_status(0, BikerStatus.IDLE)   
+                            array_com.sort()
+                            self.bikerManager.set_status(0, BikerStatus.IDLE)
                             self.bikerManager.deliver(0, d)
                     elif self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
                         ret = runner('TAKE|0|' + d.order_id)
