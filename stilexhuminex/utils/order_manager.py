@@ -22,43 +22,49 @@ class Order:
         return mini
 
     def __init__(self, args, runner: GameInteraction, biker: BikerInteraction):
-        self.order_id = args[0]
-        self.valeur = args[1]
+        arguments = args.split(';')
+        self.order_id = arguments[0]
+        self.valeur = arguments[1]
         self.runner = runner
         self.biker = biker
         plateau = runner.map
 
-        rx = args[2]
-        ry = args[3]
-        mx = args[4]
-        my = args[5]
+        rx = int(arguments[2])
+        ry = int(arguments[3])
+        mx = int(arguments[4])
+        my = int(arguments[5])
     
 
         array_resto = []
         if (plateau[rx-1][ry] == 'R'):
-            self.resto_loc.append((rx-1, ry))
+            array_resto.append((rx-1, ry))
         if (plateau[rx+1][ry] == 'R'):
-            self.resto_loc.append((rx+1, ry))
+            array_resto.append((rx+1, ry))
         if (plateau[rx][ry-1] == 'R'):
-            self.resto_loc.append((rx, ry-1))
+            array_resto.append((rx, ry-1))
         if (plateau[rx][ry+1] == 'R'):
-            self.resto_loc.append((rx, ry+1))
+            array_resto.append((rx, ry+1))
         self.resto_loc = self.array_min(array_resto)
 
         array_maison = []
         if (plateau[mx-1][my] == 'R'):
-            self.maison_loc.append((mx-1, my))
+            array_maison.append((mx-1, my))
         if (plateau[mx+1][my] == 'R'):
-            self.maison_loc.append((mx+1, my))
+            array_maison.append((mx+1, my))
         if (plateau[mx][my-1] == 'R'):
-            self.maison_loc.append((mx, my-1))
+            array_maison.append((mx, my-1))
         if (plateau[mx][my+1] == 'R'):
-            self.maison_loc.append((mx, my+1))
+            array_maison.append((mx, my+1))
         self.maison_loc = self.array_min(array_maison)
 
 
     def __lt__(self, other):
         mapMan = MapManager(self.runner.map)
-        selfPath = mapMan.astar_search(self.biker.get_pos(0) , self.resto_loc)
-        otherPath = mapMan.astar_search(self.biker.get_pos(0) , other.resto_loc)
-        return len(selfPath) < len(otherPath)
+        selfPath0 = mapMan.astar_search(self.biker.get_pos(0) , self.resto_loc)
+        #selfPath1 = mapMan.astar_search(self.biker.get_pos(1) , self.resto_loc)
+        otherPath0 = mapMan.astar_search(self.biker.get_pos(0) , other.resto_loc)
+        #otherPath1 = mapMan.astar_search(self.biker.get_pos(1) , other.resto_loc)
+
+        #selfPath = self.array_min([selfPath0, selfPath1])
+        #otherPath = self.array_min([otherPath0, otherPath1])
+        return len(selfPath0) < len(otherPath0)

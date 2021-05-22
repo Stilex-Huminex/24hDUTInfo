@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class BikerStatus(Enum):
     IDLE = 0
     GOING_TO_RESTAURANT = 1
@@ -50,21 +49,18 @@ class BikerInteraction:
 
     def is_at_restaurant(self, biker):
         for d in self.bikers[biker]['deliveries']:
-            if self.__around(d['restaurant'], self.bikers[biker]['pos']):
-                return d['code']
+            if self.bikers[biker]['pos'] == d.resto_loc:
+                return d.order_id
         return False
 
     def is_at_client(self, biker):
         for d in self.bikers[biker]['deliveries']:
-            if self.__around(d['client'], self.bikers[biker]['pos']):
-                return d['code']
+            if self.bikers[biker]['pos'] == d.maison_loc:
+                return d.order_id
         return False
 
     def take_delivery(self, biker, delivery):
-        d = delivery.split(';')
-        res = {'code': d[0], 'value': d[1], 'restaurant': [int(d[2]), int(d[3])], 'client': [int(d[4]), int(d[5])],
-               'max': d[6]}
-        self.bikers[biker]['deliveries'].append(res)
+        self.bikers[biker]['deliveries'].append(delivery)
 
     def deliver(self, biker, delivery):
         self.bikers[biker]['deliveries'].remove(delivery)

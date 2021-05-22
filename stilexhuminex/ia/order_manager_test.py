@@ -1,9 +1,10 @@
 from stilexhuminex.utils.game_interaction import GameInteraction
 from stilexhuminex.utils.astar_algorithm import MapManager
 from stilexhuminex.utils.biker_interaction import BikerInteraction, BikerStatus
+from stilexhuminex.utils.order_manager import Order
 
 
-class FirstDeliveryAI:
+class OrderManagerTest:
 
     mapManager = None
     bikerManager = None
@@ -34,23 +35,14 @@ class FirstDeliveryAI:
         runner(f'MOVE|{biker}|' + self.move_from_pos_diff(self.bikerManager.get_pos(0), self.next_move))
         self.bikerManager.move_biker(biker, self.next_move)
 
-    def gen_new_path(self, runner, biker: int, new_status: BikerStatus):
-        index = 'client' if new_status == BikerStatus.GOING_TO_CLIENT else 'restaurant'
+    def gen_new_path(self, biker: int, new_status: BikerStatus):
 
         (bx, by) = self.bikerManager.get_pos(biker)
         delivery = self.bikerManager.get_deliveries(biker)[0]
 
-        array = []
-        if runner.get_map_pos(delivery[index], shift_x=1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0] + 1, delivery[index][1])))
-        if runner.get_map_pos(delivery[index], shift_x=-1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0] - 1, delivery[index][1])))
-        if runner.get_map_pos(delivery[index], shift_y=1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0], delivery[index][1] + 1)))
-        if runner.get_map_pos(delivery[index], shift_y=-1) == 'R':
-            array.append(self.mapManager.astar_search((bx, by), (delivery[index][0], delivery[index][1] - 1)))
+        pos = delivery.maison_loc if new_status == BikerStatus.GOING_TO_CLIENT else delivery.resto_loc
 
-        self.bikerManager.set_path(biker, self.array_min(array))
+        self.bikerManager.set_path(biker, self.mapManager.astar_search((bx, by), pos))
         self.bikerManager.set_status(biker, new_status)
 
     def run(self):
@@ -65,36 +57,49 @@ class FirstDeliveryAI:
             self.bikerManager.parse_bikers_pos(retour[1])
 
             commande = runner("GETDELIVERIES")
+            arrayCom = []
+            for comm in commande[1]:
+                arrayCom.append(Order(comm, runner, self.bikerManager))
+            
+            arrayCom.sort()
 
             while runner.can_play:
-                print(self.bikerManager.get_status(0))
+                # print(self.bikerManager.get_status(0))
 
                 if runner.turn > turn:
                     turn = runner.turn
                     commande = runner("GETDELIVERIES")
-
-                first = commande[1][0]
+                    arrayCom = []
+                    for comm in commande[1]:
+                        arrayCom.append(Order(comm, runner, self.bikerManager))
+                    arrayCom.sort() 
+                    if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
+                        self.bikerManager.deliver(0, self.bikerManager.get_deliveries(0)[0])
+                        self.bikerManager.take_delivery(0, arrayCom[0])
+                        self.gen_new_path(0, BikerStatus.GOING_TO_RESTAURANT)
+                
 
                 if self.bikerManager.get_status(0) == BikerStatus.IDLE:
-                    self.bikerManager.take_delivery(0, first)
+                    self.bikerManager.take_delivery(0, arrayCom[0])
 
                 # Get the prepared next move
                 self.next_move = self.bikerManager.get_next_move(0)
                 if self.next_move is None:
                     # If there is none, calculate it
-                    self.gen_new_path(runner, 0, BikerStatus.GOING_TO_CLIENT if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT else BikerStatus.GOING_TO_RESTAURANT)
+                    self.gen_new_path(0, BikerStatus.GOING_TO_CLIENT if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT else BikerStatus.GOING_TO_RESTAURANT)
                     self.next_move = self.bikerManager.get_next_move(0)
 
                 # Act on it
                 if self.bikerManager.is_arrived(0):
                     d = self.bikerManager.get_deliveries(0)[0]
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT:
-                        ret = runner('DELIVER|0|' + d['code'])
+                        ret = runner('DELIVER|0|' + d.order_id)
                         if ret[0] == "OK":
-                            self.bikerManager.set_status(0, BikerStatus.IDLE)
+                            arrayCom.sort() 
+                            self.bikerManager.set_status(0, BikerStatus.IDLE)   
                             self.bikerManager.deliver(0, d)
                     elif self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
-                        ret = runner('TAKE|0|' + d['code'])
+                        ret = runner('TAKE|0|' + d.order_id)
                         if ret[0] == "OK":
                             self.bikerManager.set_status(0, BikerStatus.GOING_TO_CLIENT)
                 else:
