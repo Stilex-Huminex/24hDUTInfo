@@ -8,7 +8,6 @@ class BikerStatus(Enum):
 
 
 class BikerInteraction:
-
     bikers = None
 
     def __init__(self):
@@ -51,25 +50,30 @@ class BikerInteraction:
 
     def is_at_restaurant(self, biker):
         for d in self.bikers[biker]['deliveries']:
-            if d['restaurant'] == self.bikers[biker]['pos']:
+            if self.__around(d['restaurant'], self.bikers[biker]['pos']):
                 return d['code']
         return False
 
     def is_at_client(self, biker):
         for d in self.bikers[biker]['deliveries']:
-            if d['client'] == self.bikers[biker]['pos']:
+            if self.__around(d['client'], self.bikers[biker]['pos']):
                 return d['code']
         return False
 
     def take_delivery(self, biker, delivery):
         d = delivery.split(';')
-        res = {'code': d[0], 'value': d[1], 'restaurant': [int(d[2]), int(d[3])], 'client': [int(d[4]), int(d[5])], 'max': d[6]}
+        res = {'code': d[0], 'value': d[1], 'restaurant': [int(d[2]), int(d[3])], 'client': [int(d[4]), int(d[5])],
+               'max': d[6]}
         self.bikers[biker]['deliveries'].append(res)
 
     def deliver(self, biker, delivery):
-        d = delivery.split(';')
-        res = {'code': d[0], 'value': d[1], 'restaurant': [int(d[2]), int(d[3])], 'client': [int(d[4]), int(d[5])], 'max': d[6]}
-        self.bikers[biker]['deliveries'].remove(res)
+        self.bikers[biker]['deliveries'].remove(delivery)
 
     def get_deliveries(self, biker):
         return self.bikers[biker]['deliveries']
+
+    @staticmethod
+    def __around(dest, pos):
+        dest = tuple(dest)
+        return dest == (pos[0] - 1, pos[1]) or dest == (pos[0] + 1, pos[1]) \
+            or dest == (pos[0], pos[1] - 1) or dest == (pos[0], pos[1] + 1)

@@ -3,11 +3,12 @@ from interactions.astar_algorithm import MapManager
 from interactions.biker_interaction import BikerInteraction, BikerStatus
 
 
-def array_min(arr):
-    mini = arr[0]
-    for r in arr:
-        if len(r) < len(arr):
-            mini = r
+def array_min(array):
+    mini = array[0]
+    for route in array:
+        if route is not None:
+            if len(route) < len(mini):
+                mini = route
     return mini
 
 
@@ -20,6 +21,12 @@ def move_from_pos_diff(pos, move):
         return 'L'
     elif move[1] - pos[1] == 1:
         return 'R'
+    return "N"
+
+
+def move(biker):
+    runner(f'MOVE|{biker}|' + move_from_pos_diff(bikerManager.get_pos(0), next_move))
+    bikerManager.move_biker(biker, next_move)
 
 
 def gen_new_path(biker: int, new_status: BikerStatus):
@@ -38,13 +45,12 @@ def gen_new_path(biker: int, new_status: BikerStatus):
     if runner.get_map_pos(delivery[index], shift_y=-1) == 'R':
         array.append(mapMan.astar_search((bx, by), (delivery[index][0], delivery[index][1] - 1)))
 
-    print(array_min(array))
-
     bikerManager.set_path(biker, array_min(array))
-    bikerManager.set_status(biker, BikerStatus.GOING_TO_RESTAURANT)
+    bikerManager.set_status(biker, new_status)
 
 
 with GameInteraction("localhost", 2121) as runner:
+    turn = runner.turn
     runner("GETMAP")
     mapMan = MapManager(runner.map)
     bikerManager = BikerInteraction()
@@ -53,10 +59,15 @@ with GameInteraction("localhost", 2121) as runner:
     retour = runner("GETBIKERS|" + runner.team_id)
     bikerManager.parse_bikers_pos(retour[1])
 
-    while runner.can_play:
-        print(bikerManager.__getattr__(0))
+    commande = runner("GETDELIVERIES")
 
-        commande = runner("GETDELIVERIES")
+    while runner.can_play:
+        # print(bikerManager.get_status(0))
+
+        if runner.turn > turn:
+            turn = runner.turn
+            commande = runner("GETDELIVERIES")
+
         first = commande[1][0]
 
         if bikerManager.get_status(0) == BikerStatus.IDLE:
@@ -71,12 +82,15 @@ with GameInteraction("localhost", 2121) as runner:
 
         # Act on it
         if bikerManager.is_arrived(0):
+            d = bikerManager.get_deliveries(0)[0]
             if bikerManager.get_status(0) == BikerStatus.GOING_TO_CLIENT:
-                runner('DELIVER|0|' + bikerManager.get_deliveries(0)[0]['code'])
-                bikerManager.set_status(BikerStatus.IDLE)
+                ret = runner('DELIVER|0|' + d['code'])
+                if ret[0] == "OK":
+                    bikerManager.set_status(0, BikerStatus.IDLE)
+                    bikerManager.deliver(0, d)
             elif bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
-                runner('TAKE|0|' + bikerManager.get_deliveries(0)[0]['code'])
-                bikerManager.set_status(0, BikerStatus.GOING_TO_CLIENT)
+                ret = runner('TAKE|0|' + d['code'])
+                if ret[0] == "OK":
+                    bikerManager.set_status(0, BikerStatus.GOING_TO_CLIENT)
         else:
-            runner('MOVE|0|' + move_from_pos_diff(bikerManager.get_pos(0), next_move))
-            bikerManager.move_biker(0, next_move)
+            move(0)
