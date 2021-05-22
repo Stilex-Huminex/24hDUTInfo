@@ -16,31 +16,35 @@ class GameInteraction:
         self.port = port
 
     def __call__(self):
+        # Connect to the game socket
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection.connect((self.host, self.port))
-
         print(f"Connexion établie avec le serveur sur le port {self.port}")
 
-        self.register()
+        # Register
+        self.wait_for_server_command("NAME")
+        self.connection.send(self.command("StilexHuminex"))
+
+        # Wait for start
+        self.wait_for_server_command("START")
+
+        # Interact with the game
         self.prompt()
 
+        # Close connection
         print("Fermeture de la connexion")
         self.connection.close()
 
-    def register(self):
+    def wait_for_server_command(self, command: str):
         message = ""
-        while message != self.command("NAME"):
+        while message != self.command(command):
             message = self.connection.recv(1024)
-
-        self.connection.send(self.command("StilexHuminex"))
 
     def prompt(self):
         to_send = ""
 
         while to_send != b"fin":
-            to_send = input(">> ")
-            to_send += '\r\n'
-            to_send = to_send.encode()
+            to_send = self.command(input(">> "))
             self.connection.send(to_send)
 
             msg_recu = self.connection.recv(1024)
