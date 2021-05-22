@@ -44,5 +44,9 @@ with GameInteraction("localhost", 2121) as runner:
         if (where[0] - old[0] == 1):
             runner('MOVE|0|B')
         if (where[1] - old[1] == -1):
-        
+            runner('MOVE|0|L')
         if (where[1] - old[1] == 1):
+            runner('MOVE|0|R')
+        old = where
+        print(where)
+    print(runner("TAKE|0|" + code))
