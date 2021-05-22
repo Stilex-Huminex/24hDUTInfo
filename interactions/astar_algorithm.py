@@ -1,3 +1,6 @@
+from numpy.core.records import array
+
+
 class Node:
     # Initialize the class
     def __init__(self, position: (), parent: ()):
@@ -24,21 +27,12 @@ class MapManager:
 
     open_nodes = None
     closed_nodes = None
-    plateau: [] = None
+    plateau = None
 
-    def __init__(self, plat: str):
+    def __init__(self, plat):
         self.open_nodes = []
         self.closed_nodes = []
-        self.plat_str = plat
-
-    def unwrap_plateau(self):
-        def insert_newline(source_str, pos):
-            return source_str[:pos] + "\n" + source_str[pos:]
-
-        for i in range(31):
-            self.plat_str = insert_newline(self.plat_str, (32 * i) + 31)
-
-        self.plateau = self.plat_str.split('\n')
+        self.plateau = plat
 
     def astar_search(self, start, end):
 
@@ -69,13 +63,22 @@ class MapManager:
             # Unzip the current node position
             (x, y) = current_node.position
             # Get neighbors
-            neighbors = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+            neighbors = []
+            if x - 1 >= 0 :
+                neighbors.append((x - 1, y))
+            if x + 1 <= 30 :
+                neighbors.append((x + 1, y))
+            if y - 1 >= 0 :
+                neighbors.append((x, y - 1))
+            if y + 1 <= 30 :
+                neighbors.append((x, y + 1))
+
             # Loop neighbors
             for next_node in neighbors:
                 # Get value from plat
-                map_value = self.plateau.get(next_node)
+                map_value = self.plateau[next_node[0]][next_node[1]]
                 # Check if the node is a wall
-                if map_value == '#':
+                if map_value != "R" :
                     continue
                 # Create a neighbor node
                 neighbor = Node(next_node, current_node)
