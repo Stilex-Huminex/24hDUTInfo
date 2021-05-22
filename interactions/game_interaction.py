@@ -10,6 +10,7 @@ class GameInteraction:
     team_id = None
     map = None
     pa = None
+    can_play = None
 
     @staticmethod
     def command(name: str):
@@ -48,27 +49,7 @@ class GameInteraction:
         self.host = host
         self.port = port
         self.pa = 8
-
-    def __call__(self, command: str):
-        
-        # Interact with the game
-        self.connection.send(self.command(command))
-        infos = self.prettify_command(self.connection.recv(1024))
-        
-        if (command == "GETMAP"):
-            self.map = self.plateauToMatrice(infos[1][0])
-        if (command == "ENDTURN"):
-            self.pa = 8
-
-        if (command.startswith("TAKE") or command.startswith("MOVE") or command.startswith("DELIVER")):
-            self.pa -= 1
-            if self.pa == 0:
-                self.connection.send(self.command("ENDTURN"))
-                infos = self.prettify_command(self.connection.recv(1024))
-                self.pa = 8
-
-
-        return infos
+        self.can_play = True
 
     def __enter__(self):
         # Connect to the game socket
@@ -92,8 +73,43 @@ class GameInteraction:
         print("Fermeture de la connexion")
         self.connection.close()
 
-    def wait_for_server_command(self, command: str):
+    def __call__(self, command: str):
+        if command.startswith("TAKE") or command.startswith("MOVE") or command.startswith("DELIVER"):
+            if self.pa == 0:
+                self.end_turn()
+                return ['OUT', []]  # Prevent action
+            else:
+                self.pa -= 1
+        
+        # Interact with the game
+        self.connection.send(self.command(command))
+        recieved = self.connection.recv(1024)
+        infos = self.prettify_command(recieved)
+        
+        if command == "GETMAP":
+            self.map = self.plateauToMatrice(infos[1][0])
+
+        return infos
+
+    def end_turn(self):
+        try:
+            self.connection.send(self.command("ENDTURN"))
+            self.wait_for_server_command("OK")
+            self.wait_for_server_command(["START", "ENDGAME"])
+        except (ConnectionAbortedError, OSError):
+            self.can_play = False
+
+    def wait_for_server_command(self, command):
         message = b""
-        while self.parsename(message) != self.command(command):
-            message = self.connection.recv(1024)
-            return self.parseparams(message)
+        if isinstance(command, list):
+            c = [self.command(comm) for comm in command]
+            while self.parsename(message) not in c:
+                message = self.connection.recv(1024)
+                return self.parseparams(message)
+        else:
+            while self.parsename(message) != self.command(command):
+                message = self.connection.recv(1024)
+                return self.parseparams(message)
+
+    def get_map_pos(self, pos, shift_x=0, shift_y=0):
+        return self.map[pos[0]+shift_x][pos[1]+shift_y]
