@@ -35,7 +35,6 @@ class GameInteraction:
         tab = plateau.split(',')
         arr = []
         for string in tab:
-            print(len(string))
             arrNp = np.frombuffer(string.encode(), dtype='S1', count=-1)
             arr2 = []
             
