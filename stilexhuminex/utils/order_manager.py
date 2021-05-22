@@ -4,7 +4,6 @@ from stilexhuminex.utils.biker_interaction import BikerInteraction
 
 
 class Order:
-
     order_id = None
     valeur = None
     resto_loc = None
@@ -32,33 +31,31 @@ class Order:
         ry = args[3]
         mx = args[4]
         my = args[5]
-    
 
         array_resto = []
-        if (plateau[rx-1][ry] == 'R'):
-            self.resto_loc.append((rx-1, ry))
-        if (plateau[rx+1][ry] == 'R'):
-            self.resto_loc.append((rx+1, ry))
-        if (plateau[rx][ry-1] == 'R'):
-            self.resto_loc.append((rx, ry-1))
-        if (plateau[rx][ry+1] == 'R'):
-            self.resto_loc.append((rx, ry+1))
+        if plateau[rx - 1][ry] == 'R':
+            self.resto_loc.append((rx - 1, ry))
+        if plateau[rx + 1][ry] == 'R':
+            self.resto_loc.append((rx + 1, ry))
+        if plateau[rx][ry - 1] == 'R':
+            self.resto_loc.append((rx, ry - 1))
+        if plateau[rx][ry + 1] == 'R':
+            self.resto_loc.append((rx, ry + 1))
         self.resto_loc = self.array_min(array_resto)
 
         array_maison = []
-        if (plateau[mx-1][my] == 'R'):
-            self.maison_loc.append((mx-1, my))
-        if (plateau[mx+1][my] == 'R'):
-            self.maison_loc.append((mx+1, my))
-        if (plateau[mx][my-1] == 'R'):
-            self.maison_loc.append((mx, my-1))
-        if (plateau[mx][my+1] == 'R'):
-            self.maison_loc.append((mx, my+1))
+        if plateau[mx - 1][my] == 'R':
+            self.maison_loc.append((mx - 1, my))
+        if plateau[mx + 1][my] == 'R':
+            self.maison_loc.append((mx + 1, my))
+        if plateau[mx][my - 1] == 'R':
+            self.maison_loc.append((mx, my - 1))
+        if plateau[mx][my + 1] == 'R':
+            self.maison_loc.append((mx, my + 1))
         self.maison_loc = self.array_min(array_maison)
 
-
     def __lt__(self, other):
-        mapMan = MapManager(self.runner.map)
-        selfPath = mapMan.astar_search(self.biker.get_pos(0) , self.resto_loc)
-        otherPath = mapMan.astar_search(self.biker.get_pos(0) , other.resto_loc)
-        return len(selfPath) < len(otherPath)
+        map_man = MapManager(self.runner.map)
+        self_path = map_man.astar_search(self.biker.get_pos(0), self.resto_loc)
+        other_path = map_man.astar_search(self.biker.get_pos(0), other.resto_loc)
+        return len(self_path) < len(other_path)
