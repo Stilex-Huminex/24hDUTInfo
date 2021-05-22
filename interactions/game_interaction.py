@@ -9,6 +9,7 @@ class GameInteraction:
     connection = None
     team_id = None
     map = None
+    pa = None
 
     @staticmethod
     def command(name: str):
@@ -46,6 +47,7 @@ class GameInteraction:
     def __init__(self, host, port):
         self.host = host
         self.port = port
+        self.pa = 8
 
     def __call__(self, command: str):
         
@@ -55,6 +57,12 @@ class GameInteraction:
         
         if (command == "GETMAP"):
             self.map = self.plateauToMatrice(infos[1][0])
+        if (command == "TAKE" or command == "MOVE" or command == "DELIVER"):
+            self.pa -= 1
+            if self.pa == 0:
+                self.connection.send(self.command("ENDTURN"))
+                self.pa = 8
+
 
         return infos
 
