@@ -60,11 +60,11 @@ main {
   src: url("../fonts/precious.regular.ttf");
 }
 .text-primary {
-  color: #146262 !important;
+  color: #2aff41 !important;
 }
 
 .text-accent {
-  color: #25b7b7;
+  color: #90ff9c;
 }
 
 cite {
