@@ -11,6 +11,7 @@ class GameInteraction:
     pa = None
     can_play = None
     turn = None
+    nbJoueurs = None
 
     @staticmethod
     def command(name: str):
@@ -94,6 +95,10 @@ class GameInteraction:
 
         if command == "GETMAP":
             self.map = self.map_to_matrix(infos[1][0])
+            
+        if command == "TEAMS":
+            self.nbJoueurs = int(infos[1][0])
+
 
         return infos
 

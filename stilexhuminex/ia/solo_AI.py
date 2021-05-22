@@ -44,7 +44,7 @@ class soloAI:
     @staticmethod
     def meilleures_commandes(array):
         retour = []
-        for i in range(5):
+        for i in range(len(array)-4):
             max = soloAI.max_val(array)
             retour.append(max)
             array.remove(max)
@@ -71,6 +71,8 @@ class soloAI:
             runner("GETMAP")
             self.mapManager = MapManager(runner.map)
             self.bikerManager = BikerInteraction()
+            runner("TEAMS")
+            runner("ENDTURN")
 
             # Get bikers
             retour = runner("GETBIKERS|" + runner.team_id)
@@ -81,9 +83,19 @@ class soloAI:
             for comm in commande[1]:
                 arrayCom.append(Order(comm, runner, self.bikerManager))
             
-            arrayCom = soloAI.meilleures_commandes(arrayCom)
+            if (runner.nbJoueurs == 1):
+                arrayCom = soloAI.meilleures_commandes(arrayCom)
+                print("Je suis tout seul")
+            else:
+                arrayCom.sort()
+                arrayCom = arrayCom[0:3]
+                max = soloAI.max_val(arrayCom)
+                arrayCom[0] = max
+                print("Je ne suis pas tout seul")
+
 
             while runner.can_play:
+                print(runner.turn)
                 # print(self.bikerManager.get_status(0))
 
                 if runner.turn > turn:
@@ -92,7 +104,17 @@ class soloAI:
                     arrayCom = []
                     for comm in commande[1]:
                         arrayCom.append(Order(comm, runner, self.bikerManager))
-                    arrayCom = soloAI.meilleures_commandes(arrayCom)
+
+                    if (runner.nbJoueurs == 1):
+                        arrayCom = soloAI.meilleures_commandes(arrayCom)
+                        print("Je suis tout seul")
+                    else:
+                        arrayCom.sort()
+                        arrayCom = arrayCom[0:3]
+                        max = soloAI.max_val(arrayCom)
+                        arrayCom[0] = max
+                        print("Je ne suis pas tout seul")
+
                     if self.bikerManager.get_status(0) == BikerStatus.GOING_TO_RESTAURANT:
                         self.bikerManager.deliver(0, self.bikerManager.get_deliveries(0)[0])
                         self.bikerManager.take_delivery(0, arrayCom[0])

@@ -16,6 +16,8 @@ class BikerInteraction:
 
     def parse_bikers_pos(self, args):
         for biker in [0, 1]:
+            print("Args")
+            print(args)
             self.bikers[biker]['pos'] = [int(e) for e in args[biker].split(';')[1:]]
 
     def get_pos(self, biker):
