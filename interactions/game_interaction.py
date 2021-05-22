@@ -27,6 +27,21 @@ class GameInteraction:
     def prettify_command(self, command: bytes):
         return [self.parsename(command), self.parseparams(command)]
 
+    @staticmethod
+    def plateauToMAtrice(plateau: str):
+        plateau = ','.join(plateau[i:i+31] for i in range(0, len(plateau), 31))
+        tab = plateau.split(',')
+        arr = []
+        for string in tab:
+            print(len(string))
+            arrNp = np.frombuffer(string.encode(), dtype='S1', count=-1)
+            arr2 = []
+            
+            for s in arrNp:
+                arr2.append(s.decode())
+            arr.append(arr2)
+        return arr
+
     def __init__(self, host, port):
         self.host = host
         self.port = port
