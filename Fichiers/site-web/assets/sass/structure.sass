@@ -1,0 +1,42 @@
+@import "vars"
+
+html, body
+    margin: 0
+    padding: 0
+    min-height: 100vh
+    min-width: 100vw
+    background: $bg-color
+
+header.navbar
+    padding: 10px 2vw
+    height: 10vh
+    box-shadow: 1px 1px 10px -3px black
+    z-index: 100
+
+    #logo
+        border-radius: 15px
+        width: 75%
+        height: 75%
+
+    &:not(.has-banner)
+        margin-bottom: 35px
+
+#banner
+    width: 100vw
+    height: 40vh
+    display: flex
+    flex-direction: column
+
+    .filler
+        flex-grow: 1
+
+    .content
+        flex-grow: 0
+        color: black
+        font-size: 40px
+        font-family: "Montserrat", serif, sans-serif
+        text-align: center
+
+main
+    max-width: 80vw
+    margin: 0 auto

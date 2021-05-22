@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Bold.ttf");
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #f6f6f6;
+}
+
+header.navbar {
+  padding: 10px 2vw;
+  height: 10vh;
+  box-shadow: 1px 1px 10px -3px black;
+  z-index: 100;
+}
+header.navbar #logo {
+  border-radius: 15px;
+  width: 75%;
+  height: 75%;
+}
+header.navbar:not(.has-banner) {
+  margin-bottom: 35px;
+}
+
+#banner {
+  width: 100vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+}
+#banner .filler {
+  flex-grow: 1;
+}
+#banner .content {
+  flex-grow: 0;
+  color: black;
+  font-size: 40px;
+  font-family: "Montserrat", serif, sans-serif;
+  text-align: center;
+}
+
+main {
+  max-width: 80vw;
+  margin: 0 auto;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Bold.ttf");
+}
+.text-primary {
+  color: #146262 !important;
+}
+
+.text-accent {
+  color: #25b7b7;
+}
+
+cite {
+  display: block;
+}
+cite::before {
+  content: "- ";
+  margin-left: 15px;
+}
+
+article.showcase {
+  padding: 2.1vw 5vw;
+  background-color: #909294;
+}
+article.showcase .carousel .carousel-container .item-next, article.showcase .carousel .carousel-container .item-prev {
+  background-color: #3e3e3e;
+}
+article.showcase .carousel-nav {
+  background-color: rgba(62, 62, 62, 0.7);
+  border-radius: 7px;
+}
+article.showcase .carousel-nav .nav-item {
+  height: 1.2rem;
+}
+article.showcase .carousel.negate-bottom-gap .carousel-container::before {
+  padding-bottom: 51%;
+}
+
+section {
+  margin-bottom: 4vh;
+}
+
+/*# sourceMappingURL=main.css.map */
